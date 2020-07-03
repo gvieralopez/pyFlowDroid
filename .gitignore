@@ -144,4 +144,5 @@ cython_debug/
 .log
 
 # Andorid jars
-.jar
+android/
+*.jar
