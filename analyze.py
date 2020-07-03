@@ -1,11 +1,8 @@
 import os
 import subprocess
 
-FLOWDROID_EXEC = "soot-infoflow-cmd-jar-with-dependencies.jar"
-ANDROID_FOLDER = "android"
-SOURCES_SINKS_FILE = "sources_sinks/large.txt"
-APK_FOLDER = "apk"
-LOG_FOLDER = "logs"
+from settings import FLOWDROID_EXEC, ANDROID_FOLDER, SOURCES_SINKS_FILE, APK_FOLDER, LOG_FOLDER
+
 
 
 def run_command(cmd):
