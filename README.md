@@ -1,4 +1,4 @@
-#PyFlowDroid
+# PyFlowDroid
 
 This project allows you to get a ready-to-use environment of FlowDroid out-of-the-box, by running a single installation script. Additionally, it includes a Python wrapper to use FlowDroid APK analyzer in a more pythonic way. 
 
