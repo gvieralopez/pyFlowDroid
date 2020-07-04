@@ -24,15 +24,24 @@ def get_download_links():
                 link_list.append("https://cubapk.com" + a['href'])
     return link_list
 
-def download_apk(link):
-    apath = os.path.join(APK_FOLDER, link.split('/')[-3]+'.apk')
-    urllib.request.urlretrieve(link, apath )
+def download_apk(link, force_download=False):
+    try:
+        name = link.split('/')[-3]+'.apk'        
+        if name in os.listdir(APK_FOLDER) and not force_download:
+            return True, 'App in cache'
+        apath = os.path.join(APK_FOLDER, name)
+        urllib.request.urlretrieve(link, apath)
+        return True, None
+    except urllib.error.HTTPError:
+        return False, 'HTTP 404'
+    
 
 if __name__ == '__main__':
     link_list = get_download_links()
     print('Found {}\n\n'.format(len(link_list)))
     for link in link_list:
         print("Downloading {}".format(link))
-        download_apk(link)
+        status, msg = download_apk(link)
+        print('[{}] {}\n\n'.format('OK' if status else 'ERROR', msg))
     print('Download Complete')
 
