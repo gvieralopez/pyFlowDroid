@@ -37,10 +37,8 @@ def parse(log_file):
     return errors
 
 def parse_logs():
-    data = []
     for l in os.listdir(LOG_FOLDER):
-        data.append(parse(l))
-    print(data)
+        print('{} - {}'.format(parse(l), l))
 
 
 analyze_all()
