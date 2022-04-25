@@ -1,12 +1,44 @@
 # PyFlowDroid
 
-This project allows you to get a ready-to-use environment of FlowDroid out-of-the-box, by running a single installation script. Additionally, it includes a Python wrapper to use FlowDroid APK analyzer in a more pythonic way. 
+Python wrappers for FlowDroid Apk analyzer. This project was built with two goals in mind:
 
+1. Automate the creation of a FlowDroid environment out-of-the-box
+2. Allow the usage of FlowDroid from Python code 
 
 ## Installation
 
-1. You have to install *java* and *python* and add them to the path of your environment.
-2. Run *install.py* in order to download Flowdroid and its requirements.
+### Prerequisites 
+
+Make sure you have:
+
+1. A working version of [java](https://www.java.com/en/download/help/download_options.html) in the PATH of your environment.
+2. A working version of [python](https://www.python.org/downloads/) in the PATH of your environment.
+3. A working version of [git](https://git-scm.com/downloads) in the PATH of your environment.
+
+### Fetching the project source code
+
+You can clone the github repository by executing:
+
+```
+git clone https://github.com/gvieralopez/pyFlowDroid
+cd pyFlowDroid
+```
+
+### Installing pyFlowDroid dependencies
+
+You can install all of them with [pip](https://pip.pypa.io/en/stable/installation/) by:
+
+```
+pip install -r requirements.txt
+```
+### Download FlowDroid and its dependencies
+
+This step will download and install FlowDroid. After doing this you can use FlowDroid with or without pyFlowDroid wrappers.
+Simply run:
+
+```
+python -m pyflowdroid install
+```
 
 ## Usage
 
