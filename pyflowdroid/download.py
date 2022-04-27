@@ -2,7 +2,11 @@ import urllib
 import os
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from settings import APK_FOLDER
+from pyflowdroid import DEFAULT_APK_FOLDER_NAME
+
+# TODO: Refactor this script
+# TODO: Add docstrings
+# TODO: Add comments
 
 def get_download_links():
     link_list = []
@@ -27,9 +31,9 @@ def get_download_links():
 def download_apk(link, force_download=False):
     try:
         name = link.split('/')[-3]+'.apk'        
-        if name in os.listdir(APK_FOLDER) and not force_download:
+        if name in os.listdir(DEFAULT_APK_FOLDER_NAME) and not force_download:
             return True, 'App in cache'
-        apath = os.path.join(APK_FOLDER, name)
+        apath = os.path.join(DEFAULT_APK_FOLDER_NAME, name)
         urllib.request.urlretrieve(link, apath)
         return True, None
     except urllib.error.HTTPError:

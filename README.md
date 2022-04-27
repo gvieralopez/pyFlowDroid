@@ -92,12 +92,7 @@ apk file.
 [Comming Soon]
 ## Fetching apk files to test pyflowdroid
 
-The script *download_apk.py* is an *.apk* downloader that stores a local copy of 
+The script *download.py* is an *.apk* downloader that stores a local copy of 
 all the applications of the website [Cubapk](https://cubapk.com/). It can be 
 further extended to download files from other websites.
-
-In order to use it, you should install BeautifulSoup 
-```
-pip3 install beautifulsoup4
-```
 
