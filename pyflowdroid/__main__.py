@@ -1,5 +1,6 @@
 import typer
 
+
 app = typer.Typer()
 
 
@@ -9,7 +10,8 @@ def install():
     install_all()
 
 @app.command()
-def analyze():
-    typer.echo("Analyzing")
+def analyze(path: str):
+    from pyflowdroid.analyze import analyze_apk    
+    typer.echo(analyze_apk(path))
 
 app()
