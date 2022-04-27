@@ -1,5 +1,5 @@
 import logging
-
+import pathlib
 
 def configure_logging():
     logging.basicConfig(
@@ -10,9 +10,8 @@ def configure_logging():
 
 configure_logging()
 
-
 # Paths and File names
-PYFLOWDROID_PATH = "pyflowdroid"
+PYFLOWDROID_PATH = pathlib.Path(__file__).parent.resolve()
 DEFAULT_APK_FOLDER_NAME = "apks"
 ANDROID_FOLDER_NAME = "android-platforms-master"
 FLOWDROID_EXEC_NAME = "soot-infoflow-cmd-2.9.0-jar-with-dependencies.jar"

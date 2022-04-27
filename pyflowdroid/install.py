@@ -20,7 +20,7 @@ def download_flowdroid():
     """
 
     # Create a path object for the Flowdroid executable
-    flowdroid_path = Path(PYFLOWDROID_PATH, FLOWDROID_EXEC_NAME)
+    flowdroid_path = PYFLOWDROID_PATH / FLOWDROID_EXEC_NAME
 
     # Download executable from GitHub
     logging.info("Downloading Flowdroid")
@@ -51,10 +51,10 @@ def create_apk_folder():
 
     # Create a path object for the apk folder
     logging.info("Creating Directories")
-    DEFAULT_APK_PATH = Path(PYFLOWDROID_PATH, DEFAULT_APK_FOLDER_NAME)
+    apk_path = Path(DEFAULT_APK_FOLDER_NAME)
 
     # Create the folder if the folder does not exist
-    DEFAULT_APK_PATH.mkdir(parents=True, exist_ok=True)
+    apk_path.mkdir(parents=True, exist_ok=True)
 
 
 def install_all():
