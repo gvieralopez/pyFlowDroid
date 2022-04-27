@@ -49,6 +49,31 @@ class ProgressBar:
         self._update_progress_bar(self.progress, max_val)
 
 
+def cli_header(msg: str, char: str = "#", lenght: int = 80) -> str:
+    """
+    Returns a header with the given message.
+
+    Parameters
+    ----------
+    msg : str
+        Message that is going to be printed.
+    char : str
+        Character that is going to be used to fill the header.
+    lenght : int
+        Lenght of the header.
+
+
+    Returns
+    -------
+    str
+        Header.
+    """
+    
+    lp = int(0.5 * (lenght - 2 - len(msg)))  # left padding
+    rp = lenght - len(msg) - lp - 2  # right padding
+    return f'{"#" * 80}\n{"#"+" " * rp}{msg}{" " * lp + "#"}\n{"#" * lenght}\n'
+
+
 def _run_command(cmd: str) -> str:
     """
     Runs a command in a subprocess and returns the output.

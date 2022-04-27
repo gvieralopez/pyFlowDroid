@@ -11,7 +11,7 @@ def install():
 
 @app.command()
 def analyze(path: str):
-    from pyflowdroid.analyze import analyze_apk    
-    typer.echo(analyze_apk(path))
+    from pyflowdroid.analyze import analyze    
+    typer.echo(analyze(path))
 
 app()
