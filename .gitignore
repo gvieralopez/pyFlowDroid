@@ -143,6 +143,7 @@ cython_debug/
 # Log Files
 .log
 
-# Andorid jars
+# Andorid stuff
 android/
+android-platforms-master/
 *.jar
