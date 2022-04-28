@@ -19,30 +19,20 @@ Make sure you have:
 3. A working version of [git](https://git-scm.com/downloads) in the PATH of your 
    environment.
 
-### Fetching the project source code
-
-You can clone the github repository by executing:
-
-```
-git clone https://github.com/gvieralopez/pyFlowDroid
-cd pyFlowDroid
-```
-
 ### Installing pyFlowDroid dependencies
 
-You can install them with [pip](https://pip.pypa.io/en/stable/installation/) by:
+You can install it with [pip](https://pip.pypa.io/en/stable/installation/) by:
 
 ```
-pip install -r requirements.txt
+$ pip install pyflowdroid
 ```
 ### Download FlowDroid and its dependencies
 
-This step will download and install FlowDroid. After doing this you can use 
-FlowDroid with or without pyFlowDroid wrappers.
-Simply run:
+This step will download and install FlowDroid and the required resources to use
+it:
 
 ```
-python -m pyflowdroid install
+$ python -m pyflowdroid install
 ```
 
 ## Usage
@@ -60,16 +50,17 @@ resources to allow a quick analysis of apk files.
 To analyze an .apk file with the default pyflowdroid setup, just run:
 
 ```
-python -m pyflowdroid analyze path/to/file.apk
+$ python -m pyflowdroid analyze path/to/file.apk
 ```
 
 Similarly, you can perform a flow analysis on all the apks inside a folder:
 
 ```
-python -m pyflowdroid analyze path/to/folder/
+$ python -m pyflowdroid analyze path/to/folder/
 ```
 
-This should show a report like the following:
+This should store raw FlowDroid logs for each analyzed apk and then show a 
+general report like the following:
 
 ```
 ################################################################################
@@ -83,16 +74,73 @@ Leaky apps:
  - 'path/to/folder/app3.apk'
 ```
 
-And it should also generate .log files with the raw FlowDroid output for each 
-apk file.
+If you want to get some test apks, pyflowdroid includes a download function
+to fetch apks from a given supplier. Current available supplier are:
 
+- [cubapk.com](https://cubapk.com/)
+
+To fetch apks from a supplier, just run:
+
+```
+$ python -m pyflowdroid download supplier_name
+```
 
 ### Using pyflowdroid as a Python library
 
 [Comming Soon]
-## Fetching apk files to test pyflowdroid
 
-The script *download.py* is an *.apk* downloader that stores a local copy of 
-all the applications of the website [Cubapk](https://cubapk.com/). It can be 
-further extended to download files from other websites.
+## Contributing to pyflowdroid
 
+If you want to add any features to pyflowdroid you will need to get a 
+development enviroment.
+
+### Fetching the project source code
+
+You can clone the github repository by executing:
+
+```
+$ git clone https://github.com/gvieralopez/pyFlowDroid
+$ cd pyFlowDroid
+```
+
+### Installing pyFlowDroid dependencies
+
+You can install them with [poetry](https://python-poetry.org/docs/#installation)
+ by executing:
+
+```
+$ poetry shell
+$ poetry install
+$ poetry build
+```
+### Download FlowDroid and its dependencies
+
+This step will download and install FlowDroid. After doing this you can use 
+FlowDroid with or without pyFlowDroid wrappers.
+Simply run:
+
+```
+$ python -m pyflowdroid install
+```
+
+### Making your changes appear in the project
+
+Just make a Pull Request.
+
+### Run tests:
+
+```
+$ pytest
+```
+
+### Type checking:
+
+```
+$ mypy
+```
+
+### Code style:
+
+```
+$ flake8
+```

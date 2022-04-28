@@ -1,0 +1,18 @@
+[flake8]
+ignore = E501,  # Line break before binary operator (rule is incompatible with black)
+         W503,  # Following black's recommendation; line-length done by B950
+         E203,  # Whitespace before ":" (rule is incompatible with black)
+
+exclude = .git,
+          .local,
+          .cache,
+          .mypy_cache,
+          .venv,
+          .vscode,
+          __pycache__,
+          docs,
+          build,
+          dist,
+
+max-complexity = 7
+
