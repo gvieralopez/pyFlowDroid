@@ -93,7 +93,7 @@ class ApkProvider(metaclass=abc.ABCMeta):
         except urllib.error.HTTPError:
             logging.error(f"Error downloading {apk_name} from {apk_url}")
 
-    def download_apks(self, amount: int, path: str) -> None:
+    def download_apks(self, amount: int, path: str, create_path: bool = True) -> None:
         """
         Download a given amount of apks from the provider.
 
@@ -103,7 +103,13 @@ class ApkProvider(metaclass=abc.ABCMeta):
             Amount of apks to be downloaded.
         path : str
             Path where the apks will be downloaded.
+        create_path : bool, optional
+            Defines wheter or not the path will be created if it does not exists.
         """
+
+        # Create the path if it does not exists
+        if create_path:
+            Path(path).mkdir(parents=True, exist_ok=True)
 
         # Fetch the dictionary with all the apks from the provider
         avialable_apks = self.avialable_apks()
@@ -179,6 +185,7 @@ class CubapkProvider(ApkProvider):
             page += 1
         return apk_dict
 
+
 # Dictionary with all the available providers
 _providers = {"cubapk.com": CubapkProvider}
 
@@ -187,7 +194,7 @@ def get_provider(name: str) -> ApkProvider:
     """
     Returns an ApkProvider instance with the given name. If there are no
     matches with the given name, the default provider is returned.
-    
+
     Parameters
     ----------
     name : str
@@ -200,8 +207,6 @@ def get_provider(name: str) -> ApkProvider:
     """
 
     if name not in _providers.keys():
-        logging.warning(
-            f"Provider '{name}' not found, using '{DEFAULT_APK_PROVIDER}'"
-        )
+        logging.warning(f"Provider '{name}' not found, using '{DEFAULT_APK_PROVIDER}'")
         return _providers[DEFAULT_APK_PROVIDER]()
     return _providers[name]()
