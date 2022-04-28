@@ -75,14 +75,20 @@ Leaky apps:
 ```
 
 If you want to get some test apks, pyflowdroid includes a download function
-to fetch apks from a given supplier. Current available supplier are:
+to fetch apks from a given provider. Current available providers are:
 
 - [cubapk.com](https://cubapk.com/)
 
-To fetch apks from a supplier, just run:
+To fetch apks from a provider, just run:
 
 ```
-$ python -m pyflowdroid download supplier_name
+$ python -m pyflowdroid download amount path/to/store/apks/ provider_name
+```
+
+For instance, to download 10 apk files from cubapk.com, run:
+
+```
+$ python -m pyflowdroid download 10 ./myapks/ cubapk.com
 ```
 
 ### Using pyflowdroid as a Python library
