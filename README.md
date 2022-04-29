@@ -1,14 +1,14 @@
 # PyFlowDroid
 
-Python wrappers for FlowDroid Apk analyzer. This project was built with two 
-goals in mind:
+Python wrappers for [FlowDroid](https://github.com/secure-software-engineering/FlowDroid) 
+Apk analyzer. This project was built with two goals in mind:
 
 1. Automate the creation of a FlowDroid environment out-of-the-box
 2. Allow the usage of FlowDroid from Python code 
 
-## Installation
+## 1. Installation
 
-### Prerequisites 
+### 1.1 Prerequisites 
 
 Make sure you have:
 
@@ -19,28 +19,44 @@ Make sure you have:
 3. A working version of [git](https://git-scm.com/downloads) in the PATH of your 
    environment.
 
-### Installing pyFlowDroid dependencies
+### 1.2 Installing pyFlowDroid
 
-You can install it with [pip](https://pip.pypa.io/en/stable/installation/) by:
+You can get it from pypi using [pip](https://pip.pypa.io/en/stable/installation/):
 
 ```
 $ pip install pyflowdroid
 ```
-### Download FlowDroid and its dependencies
 
-This step will download and install FlowDroid and the required resources to use
-it:
+Then, you need to run an additional command to make pyflowdroid download and 
+install FlowDroid and the required resources to use it:
 
 ```
 $ python -m pyflowdroid install
 ```
 
-## Usage
+## 2. Using pyflowdroid as a Python library
 
-There are two ways in which you can use pyflowdroid: As a command line tool
-or as a Python library.
+You can use this script as a guide for downloading and analyzing apk files
+with pyflowdroid:
 
-### Using pyflowdroid from the command line
+```python
+import pyflowdroid
+
+# Path to a folder where the apks are stored
+apkfolder = "./apks"
+
+# If you need test apks, you can dowload the desired amount
+# from a given provider into a destination folder
+pyflowdroid.fetch(10, 'cubapk.com', apkfolder)
+
+# Analyze all the apks in a folder
+apk_count, leaks_count, leaky_apps = pyflowdroid.analyze(apkfolder)
+
+# Analyze a single apk
+flowdroid_logs = pyflowdroid.analyze_apk('./apks/test.apk')
+```
+
+## 3. Using pyflowdroid as a command line tool
 
 The main advantage of using pyflowdroid as a command line tool over using
 FlowDroid directly is the automatic gathering of resources required to 
@@ -91,16 +107,13 @@ For instance, to download 10 apk files from cubapk.com, run:
 $ python -m pyflowdroid download 10 ./myapks/ cubapk.com
 ```
 
-### Using pyflowdroid as a Python library
 
-[Comming Soon]
-
-## Contributing to pyflowdroid
+## 4. Contributing to pyflowdroid
 
 If you want to add any features to pyflowdroid you will need to get a 
 development enviroment.
 
-### Fetching the project source code
+### 4.1 Fetching the project source code
 
 You can clone the github repository by executing:
 
@@ -109,7 +122,7 @@ $ git clone https://github.com/gvieralopez/pyFlowDroid
 $ cd pyFlowDroid
 ```
 
-### Installing pyFlowDroid dependencies
+### 4.2 Installing pyFlowDroid dependencies
 
 You can install them with [poetry](https://python-poetry.org/docs/#installation)
  by executing:
@@ -119,7 +132,7 @@ $ poetry shell
 $ poetry install
 $ poetry build
 ```
-### Download FlowDroid and its dependencies
+### 4.3 Download FlowDroid and its dependencies
 
 This step will download and install FlowDroid. After doing this you can use 
 FlowDroid with or without pyFlowDroid wrappers.
@@ -129,24 +142,35 @@ Simply run:
 $ python -m pyflowdroid install
 ```
 
-### Making your changes appear in the project
+### 4.4 Making your changes appear in the project
 
 Just make a Pull Request.
 
-### Run tests:
+### 4.5 Quality Assurance:
+
+#### Run tests:
 
 ```
 $ pytest
 ```
 
-### Type checking:
+#### Type checking:
 
 ```
 $ mypy
 ```
 
-### Code style:
+#### Code style:
 
 ```
 $ flake8
 ```
+
+### 4.6 Pending features
+
+- Improve cli interface with hints on the parameters
+- Improve cli interface with parameters all supported API functions
+- Recognize in runtime when Flowdroid and depencies were not installed
+- Add new apk providers
+- Write pytest unit tests
+- Write documentation
