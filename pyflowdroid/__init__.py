@@ -1,27 +1,20 @@
 import logging
-import pathlib
+from pyflowdroid.download import fetch
+from pyflowdroid.install import install_deps
+from pyflowdroid.analyze import analyze, analyze_apk, generate_report
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    datefmt='%H:%M:%S'
+)
+
+__all__ = [
+    'fetch',
+    'install_deps',
+    'analyze',
+    'analyze_apk',
+    'generate_report',
+]
 
 __version__ = '0.1.1'
-
-# Paths and File names
-PYFLOWDROID_PATH = pathlib.Path(__file__).parent.resolve()
-DEFAULT_APK_FOLDER_NAME = "apks"
-ANDROID_FOLDER_NAME = "android-platforms-master"
-FLOWDROID_EXEC_NAME = "soot-infoflow-cmd-2.9.0-jar-with-dependencies.jar"
-
-# URLs
-FLOWDROID_DOWNLOAD_URL = f"""https://github.com/secure-software-engineering/FlowDroid/releases/download/v2.9/{FLOWDROID_EXEC_NAME}"""
-SABLE_DOWNLOAD_URL = """https://github.com/Sable/android-platforms/archive/master.zip"""
-
-# OTHERS
-DEFAULT_APK_PROVIDER = 'cubapk.com'
-
-def configure_logging():
-    logging.basicConfig(
-        format="%(asctime)s %(levelname)s %(message)s",
-        level=logging.INFO,
-    )
-
-
-configure_logging()

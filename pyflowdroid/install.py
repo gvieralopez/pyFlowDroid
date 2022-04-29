@@ -4,7 +4,7 @@ import zipfile
 import urllib.request
 from pathlib import Path
 
-from pyflowdroid import (
+from pyflowdroid.consts import (
     FLOWDROID_DOWNLOAD_URL,
     SABLE_DOWNLOAD_URL,
     DEFAULT_APK_FOLDER_NAME,
@@ -57,11 +57,10 @@ def create_apk_folder():
     apk_path.mkdir(parents=True, exist_ok=True)
 
 
-def install_all():
+def install_deps():
     """
-    Creates default apk folder and installs Flowdroid and Android.
+    Installs Flowdroid and Android.
     """
     download_flowdroid()
     download_android()
-    create_apk_folder()
     logging.info("Instalation Complete")

@@ -6,7 +6,7 @@ import functools
 from pathlib import Path
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from pyflowdroid import DEFAULT_APK_PROVIDER
+from pyflowdroid.consts import DEFAULT_APK_PROVIDER
 
 
 class ApkProvider(metaclass=abc.ABCMeta):
@@ -190,7 +190,7 @@ class CubapkProvider(ApkProvider):
 _providers = {"cubapk.com": CubapkProvider}
 
 
-def get_provider(name: str) -> ApkProvider:
+def get_provider(name: str, force_redownload:bool=False) -> ApkProvider:
     """
     Returns an ApkProvider instance with the given name. If there are no
     matches with the given name, the default provider is returned.
@@ -199,14 +199,48 @@ def get_provider(name: str) -> ApkProvider:
     ----------
     name : str
         Name of the provider to be returned.
+    force_redownload : bool, optional
+        Defines wheter or not the apks will be redownloaded if exist.
 
     Returns
     -------
     ApkProvider
-        Provider with the given name.
+        Provider instance with the given name.
     """
 
     if name not in _providers.keys():
         logging.warning(f"Provider '{name}' not found, using '{DEFAULT_APK_PROVIDER}'")
-        return _providers[DEFAULT_APK_PROVIDER]()
-    return _providers[name]()
+        return _providers[DEFAULT_APK_PROVIDER](force_redownload)
+    return _providers[name](force_redownload)
+
+
+def fetch(
+    amount: int,
+    provider: str,
+    path: str,
+    create_path: bool = True,
+    force_redownload: bool = False,
+) -> None:
+    """
+    Download a given amount of apks from the given provider.
+
+    Parameters
+    ----------
+    amount : int
+        Amount of apks to be downloaded.
+    provider : str
+        Name of the provider to be used.
+    path : str
+        Path where the apks will be downloaded.
+    create_path : bool, optional
+        Defines wheter or not the path will be created if it does not exists.
+    force_redownload : bool, optional
+        Defines wheter or not the apks will be redownloaded if they already
+        exists.
+    """
+
+    # Get the provider
+    provider = get_provider(provider, force_redownload)
+
+    # Download the apks
+    provider.download_apks(amount, path, create_path)

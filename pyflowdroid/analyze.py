@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 from pyflowdroid._cli_tools import _run_command, cli_header
-from pyflowdroid import (
+from pyflowdroid.consts import (
     PYFLOWDROID_PATH,
     DEFAULT_APK_FOLDER_NAME,
     ANDROID_FOLDER_NAME,
@@ -75,7 +75,7 @@ def analyze_apk(path: str, sources_and_sinks: str = "", save_logs: bool = True) 
             else:
                 raise ValueError("Invalid sources and sinks file path.")
 
-        # Log the sources and sinks file being used        
+        # Log the sources and sinks file being used
         logging.info(f"Using sources and sinks from '{sns_path}'")
 
         # Create the flowdroid call for the given apk file
@@ -87,8 +87,8 @@ def analyze_apk(path: str, sources_and_sinks: str = "", save_logs: bool = True) 
 
         # Save logs if save_logs is True
         if save_logs:
-            log_path = apk_path.with_suffix('.log')
-            logging.info(f"Flow dorid logs saved in {log_path}")
+            log_path = apk_path.with_suffix(".log")
+            logging.info(f"Flowdroid logs saved in {log_path}")
             _save_logs(logs, log_path)
 
         # Return the logs
@@ -167,7 +167,7 @@ def analyze(
     path: str = DEFAULT_APK_FOLDER_NAME,
     sources_and_sinks: str = "",
     save_logs: bool = True,
-) -> str:
+) -> tuple[int, int, list]:
     """
     Execute FlowDroid analysis in the given path.
 
@@ -189,8 +189,9 @@ def analyze(
 
     Returns
     -------
-    str
-        Summary of the analysis.
+    tuple[int, int, list]
+        Tuple containing the total number of apks analized, the total number of
+        leaks found and a list of the leaky apks.
 
     Raises
     ------
@@ -210,13 +211,50 @@ def analyze(
             logs = analyze_apk_folder(path, sources_and_sinks, save_logs)
         else:
             logs = {path: analyze_apk(path, sources_and_sinks, save_logs)}
-        return generate_report(logs)
+        return quantify_leaks(logs)
 
     # Raise execption for invalid paths
     raise ValueError(f"Address {path} does not point to an existing location")
 
 
-def count_leaks(log: str) -> int:
+def quantify_leaks(logs: dict) -> tuple[int, int, list]:
+    """
+    Quantify the number of leaks in all the analyzed APK.
+
+    Parameters
+    ----------
+    logs : dict
+        Pairs of APK file name and its raw output of FlowDroid analyzer.
+
+    Returns
+    -------
+    tuple[int, int, list]
+        Tuple containing the total number of apks analized, the total number of
+        leaks found and a list of the leaky apks.
+
+    Raises
+    ------
+    ValueError
+        If `logs` is not a dictionary.
+    """
+
+    # Check if logs is a dictionary
+    if not isinstance(logs, dict):
+        raise ValueError("logs must be a dictionary")
+
+    leaky_apks = []
+    total_leaks = 0
+    total_apps = len(logs.keys())
+    for apk, log in logs.items():
+        leak_count = count_leaks_in_log_file(log)
+        if leak_count != 0:
+            total_leaks += leak_count
+            leaky_apks.append(apk)
+
+    return total_apps, total_leaks, leaky_apks
+
+
+def count_leaks_in_log_file(log: str) -> int:
     """
     Count the number of leaks in the given logs.
 
@@ -238,14 +276,18 @@ def count_leaks(log: str) -> int:
     return int(leaks) if leaks.isdigit() else 0
 
 
-def generate_report(logs: dict) -> str:
+def generate_report(total_apps, total_leaks, leaky_apks) -> str:
     """
-    Generate a report of the analysis giving the logs dictionary
+    Generate a report of the analysis giving quantitative parameters.
 
     Parameters
     ----------
-    logs : dict
-        Pairs of APK file name and its raw output of FlowDroid analyzer
+    total_apps : _type_
+        Total number of apks analized
+    total_leaks : _type_
+        Total number of leaks found by Flowdroid
+    leaky_apks : _type_
+        List of the leaky apks.
 
     Returns
     -------
@@ -253,17 +295,8 @@ def generate_report(logs: dict) -> str:
         Comprehensive report of the analysis conducted
     """
 
-    leaky_apks = []
-    total_leaks = 0
-    total_apps = len(logs.keys())
-    for apk, log in logs.items():
-        leak_count = count_leaks(log)
-        if leak_count != 0:
-            total_leaks += leak_count
-            leaky_apks.append(apk)
-
     # Generate the report
-    report = cli_header('PYFLOWDROID REPORT') 
+    report = cli_header("PYFLOWDROID REPORT")
     report += f"Analized: {total_apps}\n"
     report += f"Leaks found: {total_leaks}\n\n"
 

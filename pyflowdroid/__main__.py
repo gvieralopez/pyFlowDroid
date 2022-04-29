@@ -1,4 +1,5 @@
 import typer
+import pyflowdroid
 
 
 app = typer.Typer()
@@ -6,19 +7,16 @@ app = typer.Typer()
 
 @app.command()
 def install():
-    from pyflowdroid.install import install_all
-    install_all()
+    pyflowdroid.install_deps()
 
 @app.command()
 def analyze(path: str):
-    from pyflowdroid.analyze import analyze    
-    typer.echo(analyze(path))
+    total, leaks, leaky_apps = pyflowdroid.analyze(path)
+    typer.echo(pyflowdroid.generate_report(total, leaks, leaky_apps))
 
 @app.command()
 def download(amount:int, path: str, provider: str):
-    from pyflowdroid.download import get_provider
-    prv = get_provider(provider)
-    prv.download_apks(amount, path)
+    pyflowdroid.fetch(amount, provider, path)
     typer.echo(f"Downloaded {amount} apks from {provider}")
     
 app()
