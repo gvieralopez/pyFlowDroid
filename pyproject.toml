@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyflowdroid"
-version = "0.1.1"
+version = "0.2.0"
 description = "Python wrapper to use FlowDroid APK analyzer."
 authors = ["Gustavo Viera López <gvieralopez@gmail.com>"]
 # New attributes
