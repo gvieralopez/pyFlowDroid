@@ -94,7 +94,7 @@ max-args = 10
 "tests/**" = ["ARG", "S101", "PLR2004", "PLR0913"]
 "scripts/**" = ["T20", "S603"]  # Allow print statements and subprocess calls on the scripts
 # Java and FlowDroid run as argv lists, never through a shell
-"src/pyflowdroid/environment.py" = ["S603"]
+"src/pyflowdroid/{environment,runner}.py" = ["S603"]
 
 [tool.ruff.lint.isort]
 split-on-trailing-comma = false
