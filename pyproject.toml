@@ -12,6 +12,8 @@ keywords = ["apk", "android", "flowdroid", "taint analysis", "static analysis"]
 
 dependencies = [
     "beautifulsoup4>=4.14",
+    "defusedxml>=0.7",
+    "httpx>=0.28",
     "lxml>=6.0",
     "platformdirs>=4.5",
     "progressbar>=2.5",
@@ -31,6 +33,7 @@ dev = [
     "pytest-env>=1.8",
     "ruff>=0.17",
     "ebump>=0.2.2",
+    "types-defusedxml>=0.7",
 ]
 
 
