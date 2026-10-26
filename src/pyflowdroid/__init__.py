@@ -53,4 +53,4 @@ __all__ = [
     "install",
 ]
 
-__version__ = "0.9.0-beta0"
+__version__ = "0.9.0"
