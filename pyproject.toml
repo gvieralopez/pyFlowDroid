@@ -13,6 +13,7 @@ keywords = ["apk", "android", "flowdroid", "taint analysis", "static analysis"]
 dependencies = [
     "beautifulsoup4>=4.14",
     "lxml>=6.0",
+    "platformdirs>=4.5",
     "progressbar>=2.5",
     "typer>=0.20",
 ]
@@ -89,6 +90,8 @@ max-args = 10
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["ARG", "S101", "PLR2004", "PLR0913"]
 "scripts/**" = ["T20", "S603"]  # Allow print statements and subprocess calls on the scripts
+# Java and FlowDroid run as argv lists, never through a shell
+"src/pyflowdroid/environment.py" = ["S603"]
 
 [tool.ruff.lint.isort]
 split-on-trailing-comma = false

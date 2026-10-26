@@ -695,6 +695,7 @@ source = { editable = "." }
 dependencies = [
     { name = "beautifulsoup4" },
     { name = "lxml" },
+    { name = "platformdirs" },
     { name = "progressbar" },
     { name = "typer" },
 ]
@@ -714,6 +715,7 @@ dev = [
 requires-dist = [
     { name = "beautifulsoup4", specifier = ">=4.14" },
     { name = "lxml", specifier = ">=6.0" },
+    { name = "platformdirs", specifier = ">=4.5" },
     { name = "progressbar", specifier = ">=2.5" },
     { name = "typer", specifier = ">=0.20" },
 ]
