@@ -1,11 +1,12 @@
 import logging
 from pathlib import Path
+
 from pyflowdroid._cli_tools import _run_command, cli_header
 from pyflowdroid.consts import (
-    PYFLOWDROID_PATH,
-    DEFAULT_APK_FOLDER_NAME,
     ANDROID_FOLDER_NAME,
+    DEFAULT_APK_FOLDER_NAME,
     FLOWDROID_EXEC_NAME,
+    PYFLOWDROID_PATH,
 )
 
 
@@ -60,7 +61,6 @@ def analyze_apk(path: str, sources_and_sinks: str = "", save_logs: bool = True) 
 
     # Check if path exists, is a file and its extension is .apk
     if apk_path.exists() and apk_path.is_file() and str(path).endswith(".apk"):
-
         # Create the path for required resources
         fd_path = Path(PYFLOWDROID_PATH, FLOWDROID_EXEC_NAME)
         android_path = Path(PYFLOWDROID_PATH, ANDROID_FOLDER_NAME)
@@ -100,9 +100,7 @@ def analyze_apk(path: str, sources_and_sinks: str = "", save_logs: bool = True) 
 
 
 def analyze_apk_folder(
-    path: str = DEFAULT_APK_FOLDER_NAME,
-    sources_and_sinks: str = "",
-    save_logs: bool = True,
+    path: str = DEFAULT_APK_FOLDER_NAME, sources_and_sinks: str = "", save_logs: bool = True
 ) -> dict:
     """
     Execute FlowDroid analysis in all APK files contained in a folder.
@@ -144,12 +142,9 @@ def analyze_apk_folder(
 
     # Check if path exists and is a folder
     if folder_path.exists() and folder_path.is_dir():
-
         # Retreive all apk files in the folder
         apk_paths = [
-            str(apk_path)
-            for apk_path in folder_path.glob("**/*.apk")
-            if apk_path.is_file()
+            str(apk_path) for apk_path in folder_path.glob("**/*.apk") if apk_path.is_file()
         ]
         logging.info(f"Found {len(apk_paths)} apks in '{folder_path}'")
 
@@ -164,9 +159,7 @@ def analyze_apk_folder(
 
 
 def analyze(
-    path: str = DEFAULT_APK_FOLDER_NAME,
-    sources_and_sinks: str = "",
-    save_logs: bool = True,
+    path: str = DEFAULT_APK_FOLDER_NAME, sources_and_sinks: str = "", save_logs: bool = True
 ) -> tuple[int, int, list]:
     """
     Execute FlowDroid analysis in the given path.
@@ -271,7 +264,7 @@ def count_leaks_in_log_file(log: str) -> int:
 
     # Parse the total count of leaks found in the logs
     # TODO: Improve this with regex
-    last_line = log.split("\n")[-1]
+    last_line = log.rsplit("\n", maxsplit=1)[-1]
     leaks = last_line.split()[-2]
     return int(leaks) if leaks.isdigit() else 0
 
@@ -301,7 +294,7 @@ def generate_report(total_apps, total_leaks, leaky_apks) -> str:
     report += f"Leaks found: {total_leaks}\n\n"
 
     if len(leaky_apks):
-        report += f"Leaky apks:\n"
+        report += "Leaky apks:\n"
 
         for lap in leaky_apks:
             report += f" - {lap}\n"

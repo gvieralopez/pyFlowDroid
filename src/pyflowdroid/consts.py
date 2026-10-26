@@ -11,4 +11,4 @@ FLOWDROID_DOWNLOAD_URL = f"""https://github.com/secure-software-engineering/Flow
 SABLE_DOWNLOAD_URL = """https://github.com/Sable/android-platforms/archive/master.zip"""
 
 # OTHERS
-DEFAULT_APK_PROVIDER = 'cubapk.com'
+DEFAULT_APK_PROVIDER = "cubapk.com"

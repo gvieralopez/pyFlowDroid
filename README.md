@@ -67,13 +67,13 @@ apkfolder = "./apks"
 
 # If you need test apks, you can download the desired amount
 # from a given provider into a destination folder
-pyflowdroid.fetch(10, 'cubapk.com', apkfolder)
+pyflowdroid.fetch(10, "cubapk.com", apkfolder)
 
 # Analyze all the apks in a folder
 apk_count, leaks_count, leaky_apps = pyflowdroid.analyze(apkfolder)
 
 # Analyze a single apk
-flowdroid_logs = pyflowdroid.analyze_apk('./apks/test.apk')
+flowdroid_logs = pyflowdroid.analyze_apk("./apks/test.apk")
 ```
 
 ## 3. Using pyflowdroid as a command line tool

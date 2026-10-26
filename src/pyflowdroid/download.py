@@ -1,11 +1,13 @@
 import abc
+import functools
+import logging
 import shutil
 import urllib
-import logging
-import functools
 from pathlib import Path
 from urllib.request import urlopen
+
 from bs4 import BeautifulSoup
+
 from pyflowdroid.consts import DEFAULT_APK_PROVIDER
 
 
@@ -74,7 +76,6 @@ class ApkProvider(metaclass=abc.ABCMeta):
 
         # Check if the apk file already exists and if force_redownload is False
         if apk_path.exists() and not self.force_redownload:
-
             # If the apk file already exists and force_redownload is False skips
             # the download
             logging.info(f"{apk_name} already exists")
@@ -85,9 +86,7 @@ class ApkProvider(metaclass=abc.ABCMeta):
             logging.info(f"Downloading {apk_name} from {apk_url}")
             hdr = {"User-Agent": "Mozilla/5.0"}
             req = urllib.request.Request(apk_url, headers=hdr)
-            with urllib.request.urlopen(req) as response, open(
-                apk_path, "wb"
-            ) as out_file:
+            with urllib.request.urlopen(req) as response, open(apk_path, "wb") as out_file:
                 shutil.copyfileobj(response, out_file)
         # Notify if the apk file could not be downloaded
         except urllib.error.HTTPError:
@@ -123,9 +122,7 @@ class ApkProvider(metaclass=abc.ABCMeta):
             self.download_apk(apk_name, apk_url, path)
 
         # Download each apk until reaching the amount of apks to be downloaded
-        logging.error(
-            f"Downloaded {i} apks instead of {amount}. No more apks to download"
-        )
+        logging.error(f"Downloaded {i} apks instead of {amount}. No more apks to download")
 
 
 class CubapkProvider(ApkProvider):
@@ -137,7 +134,7 @@ class CubapkProvider(ApkProvider):
         super().__init__(force_redownload)
         self.base_url = "https://cubapk.com"
 
-    @functools.lru_cache(maxsize=None)
+    @functools.cache
     def avialable_apks(self) -> dict:
         """
         Generates a dictionary with the avialable apks from cubapk.com website.
@@ -155,19 +152,16 @@ class CubapkProvider(ApkProvider):
 
             # Fetches the website raw HTML
             try:
-                request = urllib.request.Request(
-                    page_url, headers={"User-Agent": "Mozilla/5.0"}
-                )
+                request = urllib.request.Request(page_url, headers={"User-Agent": "Mozilla/5.0"})
                 text = urlopen(request).read()
             except urllib.error.HTTPError:
-                logging.info(f"Index of {self.base_url} has {page-1} pages")
+                logging.info(f"Index of {self.base_url} has {page - 1} pages")
                 break
 
             # Parses the website
             soup = BeautifulSoup(text, features="lxml")
             data = soup.findAll("div", attrs={"class": "app-data"})
             for div in data:
-
                 # Parse the apk name
                 raw_name = div.find("div", attrs={"class": "app-title"}).text
                 apk_name = "".join(filter(str.isalnum, raw_name))
@@ -190,7 +184,7 @@ class CubapkProvider(ApkProvider):
 _providers = {"cubapk.com": CubapkProvider}
 
 
-def get_provider(name: str, force_redownload:bool=False) -> ApkProvider:
+def get_provider(name: str, force_redownload: bool = False) -> ApkProvider:
     """
     Returns an ApkProvider instance with the given name. If there are no
     matches with the given name, the default provider is returned.
@@ -208,18 +202,14 @@ def get_provider(name: str, force_redownload:bool=False) -> ApkProvider:
         Provider instance with the given name.
     """
 
-    if name not in _providers.keys():
+    if name not in _providers:
         logging.warning(f"Provider '{name}' not found, using '{DEFAULT_APK_PROVIDER}'")
         return _providers[DEFAULT_APK_PROVIDER](force_redownload)
     return _providers[name](force_redownload)
 
 
 def fetch(
-    amount: int,
-    provider: str,
-    path: str,
-    create_path: bool = True,
-    force_redownload: bool = False,
+    amount: int, provider: str, path: str, create_path: bool = True, force_redownload: bool = False
 ) -> None:
     """
     Download a given amount of apks from the given provider.

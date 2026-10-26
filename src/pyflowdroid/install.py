@@ -1,17 +1,17 @@
-import os
 import logging
-import zipfile
+import os
 import urllib.request
+import zipfile
 from pathlib import Path
 
+from pyflowdroid._cli_tools import ProgressBar
 from pyflowdroid.consts import (
-    FLOWDROID_DOWNLOAD_URL,
-    SABLE_DOWNLOAD_URL,
     DEFAULT_APK_FOLDER_NAME,
+    FLOWDROID_DOWNLOAD_URL,
     FLOWDROID_EXEC_NAME,
     PYFLOWDROID_PATH,
+    SABLE_DOWNLOAD_URL,
 )
-from pyflowdroid._cli_tools import ProgressBar
 
 
 def download_flowdroid():

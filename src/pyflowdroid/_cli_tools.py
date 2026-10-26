@@ -1,6 +1,7 @@
 import random
-import progressbar
 import subprocess
+
+import progressbar
 
 
 class ProgressBar:
@@ -68,10 +69,10 @@ def cli_header(msg: str, char: str = "#", lenght: int = 80) -> str:
     str
         Header.
     """
-    
+
     lp = int(0.5 * (lenght - 2 - len(msg)))  # left padding
     rp = lenght - len(msg) - lp - 2  # right padding
-    return f'{"#" * 80}\n{"#"+" " * rp}{msg}{" " * lp + "#"}\n{"#" * lenght}\n'
+    return f"{'#' * 80}\n{'#' + ' ' * rp}{msg}{' ' * lp + '#'}\n{'#' * lenght}\n"
 
 
 def _run_command(cmd: str) -> str:
