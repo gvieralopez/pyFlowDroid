@@ -18,5 +18,7 @@ def analyze(path: str):
 def download(amount:int, path: str, provider: str):
     pyflowdroid.fetch(amount, provider, path)
     typer.echo(f"Downloaded {amount} apks from {provider}")
-    
-app()
+
+
+if __name__ == "__main__":
+    app()

@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  workflow_run:
+    workflows: ["QA"]
+    branches: [main]
+    types: [completed]
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.event.workflow_run.conclusion == 'success'
+    uses: gvieralopez/cookie-pyrate/.github/workflows/reusable-release.yml@v1.0.0
+    permissions:
+      contents: write
+      id-token: write
+    with:
+      cookie-pyrate-ref: v1.0.0
+      create-github-release: true
+      attach-distribution: false
+      publish-to-pypi: true
+      pypi-project-url: https://pypi.org/project/pyflowdroid/
+      prepare-next-version: true
+    # Passes RELEASE_SSH_KEY (created by `make repo`; lets the version bumps land on a
+    # protected main) and any secret named in secret-env.
+    secrets: inherit
