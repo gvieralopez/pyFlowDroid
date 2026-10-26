@@ -1,0 +1,14 @@
+The data flow analysis has failed. Error message: ZIP file can't be opened as a file system because entry "/." has a '.' or '..' element in its name
+java.util.zip.ZipException: ZIP file can't be opened as a file system because entry "/." has a '.' or '..' element in its name
+	at jdk.zipfs/jdk.nio.zipfs.ZipFileSystem.initCEN(ZipFileSystem.java:1605)
+	at jdk.zipfs/jdk.nio.zipfs.ZipFileSystem.<init>(ZipFileSystem.java:182)
+	at jdk.zipfs/jdk.nio.zipfs.ZipFileSystemProvider.getZipFileSystem(ZipFileSystemProvider.java:125)
+	at jdk.zipfs/jdk.nio.zipfs.ZipFileSystemProvider.newFileSystem(ZipFileSystemProvider.java:106)
+	at java.base/java.nio.file.FileSystems.newFileSystem(FileSystems.java:339)
+	at java.base/java.nio.file.FileSystems.newFileSystem(FileSystems.java:288)
+	at soot.jimple.infoflow.methodSummary.data.provider.XMLSummaryProvider.getPathInJar(XMLSummaryProvider.java:198)
+	at soot.jimple.infoflow.methodSummary.data.provider.XMLSummaryProvider.loadSummariesFromJAR(XMLSummaryProvider.java:122)
+	at soot.jimple.infoflow.methodSummary.data.provider.LazySummaryProvider.<init>(LazySummaryProvider.java:47)
+	at soot.jimple.infoflow.methodSummary.data.provider.LazySummaryProvider.<init>(LazySummaryProvider.java:34)
+	at soot.jimple.infoflow.cmd.MainClass.initializeTaintWrapper(MainClass.java:469)
+	at soot.jimple.infoflow.cmd.MainClass.run(MainClass.java:315)
