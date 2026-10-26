@@ -8,7 +8,7 @@ import httpx
 from defusedxml import ElementTree
 
 from pyflowdroid import net
-from pyflowdroid.environment import home, save_installation
+from pyflowdroid.discovery import home, save_installation
 from pyflowdroid.errors import ChecksumMismatchError, DownloadError
 from pyflowdroid.models import Installation
 

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from pyflowdroid.environment import HOME_VARIABLE, save_installation
+from pyflowdroid.discovery import HOME_VARIABLE, save_installation
 from pyflowdroid.models import Installation
 
 DATA = Path(__file__).parent / "data"

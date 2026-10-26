@@ -5,7 +5,7 @@ from pathlib import Path
 import platformdirs
 import pytest
 
-from pyflowdroid import environment as env
+from pyflowdroid import discovery as env
 from pyflowdroid.errors import FlowDroidNotInstalledError, JavaNotFoundError, UnsupportedJavaError
 from pyflowdroid.models import Installation, JavaRuntime
 

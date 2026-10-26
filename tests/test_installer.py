@@ -5,7 +5,7 @@ import httpx
 import pytest
 
 from pyflowdroid import installer
-from pyflowdroid.environment import load_installation
+from pyflowdroid.discovery import load_installation
 from pyflowdroid.errors import ChecksumMismatchError, DownloadError
 from pyflowdroid.models import Installation
 

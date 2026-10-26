@@ -614,12 +614,6 @@ wheels = [
 ]
 
 [[package]]
-name = "progressbar"
-version = "2.5"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/a3/a6/b8e451f6cff1c99b4747a2f7235aa904d2d49e8e1464e0b798272aa84358/progressbar-2.5.tar.gz", hash = "sha256:5d81cb529da2e223b53962afd6c8ca0f05c6670e40309a7219eacc36af9b6c63", size = 10046, upload-time = "2018-06-29T02:32:00.222Z" }
-
-[[package]]
 name = "pyflowdroid"
 version = "0.9.0b0"
 source = { editable = "." }
@@ -627,7 +621,6 @@ dependencies = [
     { name = "defusedxml" },
     { name = "httpx" },
     { name = "platformdirs" },
-    { name = "progressbar" },
     { name = "typer" },
 ]
 
@@ -648,7 +641,6 @@ requires-dist = [
     { name = "defusedxml", specifier = ">=0.7" },
     { name = "httpx", specifier = ">=0.28" },
     { name = "platformdirs", specifier = ">=4.5" },
-    { name = "progressbar", specifier = ">=2.5" },
     { name = "typer", specifier = ">=0.20" },
 ]
 

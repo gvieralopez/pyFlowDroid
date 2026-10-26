@@ -14,7 +14,6 @@ dependencies = [
     "defusedxml>=0.7",
     "httpx>=0.28",
     "platformdirs>=4.5",
-    "progressbar>=2.5",
     "typer>=0.20",
 ]
 
@@ -41,9 +40,6 @@ build-backend = "hatchling.build"
 
 [tool.uv]
 default-groups = ["dev"]
-
-[project.scripts]
-pyflowdroid = "pyflowdroid.__main__:app"
 
 [tool.ruff]
 line-length = 100
@@ -92,7 +88,7 @@ max-args = 10
 "tests/**" = ["ARG", "S101", "PLR2004", "PLR0913"]
 "scripts/**" = ["T20", "S603"]  # Allow print statements and subprocess calls on the scripts
 # Java and FlowDroid run as argv lists, never through a shell
-"src/pyflowdroid/{environment,runner}.py" = ["S603"]
+"src/pyflowdroid/{discovery,runner}.py" = ["S603"]
 
 [tool.ruff.lint.isort]
 split-on-trailing-comma = false
