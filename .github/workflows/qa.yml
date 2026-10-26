@@ -12,3 +12,6 @@ jobs:
       cookie-pyrate-ref: v1.0.0
       python-version: "3.11"
       test-python-versions: '["3.12", "3.13", "3.14", "3.15"]'
+      # Real FlowDroid runs on DroidBench apps, on the oldest Java FlowDroid supports
+      extra-checks: |
+        JAVA_HOME="$JAVA_HOME_17_X64" uv run pytest -m e2e --no-cov
