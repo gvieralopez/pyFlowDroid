@@ -170,8 +170,6 @@ process with the following options on the `.github/workflows/release.yml` workfl
 - `create-github-release` (on by default) — cuts a GitHub release for the new tag.
 - `attach-distribution` (off by default) — builds the distribution and attaches it to the
   GitHub release as downloadable files. Requires `create-github-release` to also be on.
-- `publish-to-pypi` (off by default) — builds the distribution and publishes it to PyPI.
-  Only relevant if you distribute this project as a package.
 - `prepare-next-version` (on by default) — bumps `main` to the next prerelease once the
   release is out.
 
@@ -179,25 +177,38 @@ process with the following options on the `.github/workflows/release.yml` workfl
 
 Set up Trusted Publishing so no API token has to be stored as a secret:
 
-1. Go to <https://pypi.org/manage/account/publishing/>
-2. Under "Add a new pending publisher," choose GitHub Actions
-3. Fill in the workflow name `release.yml` and the environment name `pypi`
-4. Save. PyPI will now trust publish requests coming from that workflow.
+1. Go to <https://pypi.org/manage/account/publishing/> (for a project already on PyPI, its own
+   "Publishing" settings)
+2. Add a GitHub publisher with this repository, the workflow name `release.yml` and the
+   environment name `pypi`
+3. Save. PyPI will now trust publish requests coming from that workflow.
 
-Then, in `.github/workflows/release.yml`, add `id-token: write` to `permissions`, enable
-`publish-to-pypi`, and point the deployment environment at the project:
+Then add a `pypi` job to `.github/workflows/release.yml`, next to the `release` job:
 
 ```yaml
+  pypi:
+    needs: release
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/pyflowdroid/
     permissions:
-      contents: write
+      contents: read
       id-token: write
-    with:
-      cookie-pyrate-ref: ...
-      publish-to-pypi: true
-      pypi-project-url: https://pypi.org/project/pyflowdroid/
+    steps:
+      - uses: gvieralopez/cookie-pyrate/.github/actions/publish-to-pypi@v1.0.1
+        with:
+          sha: ${{ needs.release.outputs.sha }}
 ```
 
-Without `id-token: write` the whole workflow fails to start, so add it in the same edit.
+The job has to live in this file: PyPI only trusts the workflow file that defines the uploading
+job, so the upload can't happen inside the reusable release. The action builds the released
+commit and uploads it. It runs once the release is out, so if the upload fails the GitHub release
+is already published: re-run the failed `pypi` job; files PyPI already has are skipped.
+
+To try it on TestPyPI first, register the publisher on <https://test.pypi.org> instead and add
+`index: testpypi` under `with:`. A build that needs `system-dependencies` or a `setup-command`
+takes them under `with:` too; secrets the setup command needs go in the step's `env:`.
 
 #### Extra release files
 
@@ -247,10 +258,10 @@ Add them under `with:` in `.github/workflows/qa.yml` (`setup-command` and `secre
 ```yaml
 jobs:
   qa:
-    uses: gvieralopez/cookie-pyrate/.github/workflows/reusable-qa.yml@v1.0.0
+    uses: gvieralopez/cookie-pyrate/.github/workflows/reusable-qa.yml@v1.0.1
     secrets: inherit
     with:
-      cookie-pyrate-ref: v1.0.0
+      cookie-pyrate-ref: v1.0.1
       python-version: "3.11"
       secret-env: WHEELS_TOKEN
       setup-command: uv run --no-project --with requests scripts/download_wheels.py
