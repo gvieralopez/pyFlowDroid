@@ -14,8 +14,12 @@ dependencies = [
     "defusedxml>=0.7",
     "httpx>=0.28",
     "platformdirs>=4.5",
+    "rich>=14",
     "typer>=0.20",
 ]
+
+[project.scripts]
+pyflowdroid = "pyflowdroid.cli:app"
 
 [project.urls]
 Repository = "https://github.com/gvieralopez/pyFlowDroid"
