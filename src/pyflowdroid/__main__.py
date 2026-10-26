@@ -1,6 +1,9 @@
+from pathlib import Path
+
 import typer
 
 import pyflowdroid
+from pyflowdroid import apk_sources
 
 app = typer.Typer()
 
@@ -18,7 +21,7 @@ def analyze(path: str):
 
 @app.command()
 def download(amount: int, path: str, provider: str):
-    pyflowdroid.fetch(amount, provider, path)
+    apk_sources.download(provider, amount, Path(path))
     typer.echo(f"Downloaded {amount} apks from {provider}")
 
 

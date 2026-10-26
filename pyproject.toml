@@ -11,10 +11,8 @@ license = { text = "MIT" }
 keywords = ["apk", "android", "flowdroid", "taint analysis", "static analysis"]
 
 dependencies = [
-    "beautifulsoup4>=4.14",
     "defusedxml>=0.7",
     "httpx>=0.28",
-    "lxml>=6.0",
     "platformdirs>=4.5",
     "progressbar>=2.5",
     "typer>=0.20",

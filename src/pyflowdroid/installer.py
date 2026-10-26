@@ -1,13 +1,13 @@
 import hashlib
 import logging
-from collections.abc import Callable, Iterator
-from contextlib import contextmanager
+from collections.abc import Callable
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import httpx
 from defusedxml import ElementTree
 
+from pyflowdroid import net
 from pyflowdroid.environment import home, save_installation
 from pyflowdroid.errors import ChecksumMismatchError, DownloadError
 from pyflowdroid.models import Installation
@@ -19,7 +19,6 @@ FLOWDROID_RAW_URL = "https://raw.githubusercontent.com/secure-software-engineeri
 SOURCES_SINKS_PATH = "soot-infoflow-android/SourcesAndSinks.txt"
 ANDROID_PLATFORMS_RAW_URL = "https://raw.githubusercontent.com/Sable/android-platforms/master"
 ANDROID_PLATFORM = 36
-DOWNLOAD_TIMEOUT_SECONDS = 60
 CHUNK_BYTES = 1 << 16
 
 Progress = Callable[[str, int, int | None], None]
@@ -30,7 +29,7 @@ def install() -> Installation:
 
 
 def install_with_progress(progress: Progress) -> Installation:
-    with httpx.Client(follow_redirects=True, timeout=DOWNLOAD_TIMEOUT_SECONDS) as client:
+    with net.new_client() as client:
         return install_using(client, home(), progress)
 
 
@@ -53,7 +52,7 @@ def install_using(client: httpx.Client, location: Path, progress: Progress) -> I
 
 
 def latest_flowdroid_version(client: httpx.Client) -> str:
-    metadata = _get(client, f"{MAVEN_URL}/maven-metadata.xml")
+    metadata = net.get(client, f"{MAVEN_URL}/maven-metadata.xml")
     release = ElementTree.fromstring(metadata.content).findtext("versioning/release")
     if not release:
         raise DownloadError("Maven Central did not report a FlowDroid release")
@@ -66,7 +65,7 @@ def _fetch_flowdroid(client: httpx.Client, installation: Installation, progress:
         logger.info("FlowDroid %s is already downloaded", installation.flowdroid_version)
         return
     url = f"{MAVEN_URL}/{installation.flowdroid_version}/{jar.name}"
-    expected = _get(client, f"{url}.sha1").text.split()[0]
+    expected = net.get(client, f"{url}.sha1").text.split()[0]
     label = f"FlowDroid {installation.flowdroid_version}"
     if _download(client, url, jar, label, progress) != expected:
         jar.unlink()
@@ -80,7 +79,7 @@ def _fetch_sources_sinks(
     if destination.is_file():
         return
     for tag in _release_tags(installation.flowdroid_version):
-        response = _request(client, f"{FLOWDROID_RAW_URL}/{tag}/{SOURCES_SINKS_PATH}")
+        response = net.request(client, f"{FLOWDROID_RAW_URL}/{tag}/{SOURCES_SINKS_PATH}")
         if response.is_success:
             destination.write_bytes(response.content)
             progress(destination.name, len(response.content), len(response.content))
@@ -108,7 +107,7 @@ def _download(
     digest = hashlib.sha1(usedforsecurity=False)
     with TemporaryDirectory(dir=destination.parent) as temporary:
         partial = Path(temporary) / destination.name
-        with _stream(client, url) as response, partial.open("wb") as file:
+        with net.stream(client, url) as response, partial.open("wb") as file:
             total = (
                 int(response.headers["Content-Length"])
                 if "Content-Length" in response.headers
@@ -129,31 +128,6 @@ def _release_tags(version: str) -> list[str]:
     if version.endswith(".0"):
         tags.append(f"v{version.removesuffix('.0')}")
     return tags
-
-
-def _get(client: httpx.Client, url: str) -> httpx.Response:
-    response = _request(client, url)
-    if not response.is_success:
-        raise DownloadError(f"Could not download {url}: HTTP {response.status_code}")
-    return response
-
-
-def _request(client: httpx.Client, url: str) -> httpx.Response:
-    try:
-        return client.get(url)
-    except httpx.HTTPError as error:
-        raise DownloadError(f"Could not download {url}: {error}") from error
-
-
-@contextmanager
-def _stream(client: httpx.Client, url: str) -> Iterator[httpx.Response]:
-    try:
-        with client.stream("GET", url) as response:
-            if not response.is_success:
-                raise DownloadError(f"Could not download {url}: HTTP {response.status_code}")
-            yield response
-    except httpx.HTTPError as error:
-        raise DownloadError(f"Could not download {url}: {error}") from error
 
 
 def _no_progress(_label: str, _done: int, _total: int | None) -> None:
